@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">genral store</string>
+    <string name="i_am_human">i am human</string>
+    <string name="Enter_me">Enter_me</string>
 </resources>
