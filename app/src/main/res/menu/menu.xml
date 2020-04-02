@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Register Boook"
+        android:id="@+id/item_register_book"
+        android:icon="@drawable/ic_list"
+        />
+    <item
+        android:title="Add Customer"
+        android:id="@+id/item_add_customer"
+        android:icon="@drawable/ic_list"
+        />
+</menu>

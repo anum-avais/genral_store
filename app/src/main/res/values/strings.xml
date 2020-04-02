@@ -2,4 +2,12 @@
     <string name="app_name">genral store</string>
     <string name="i_am_human">i am human</string>
     <string name="Enter_me">Enter_me</string>
+
+    <string name="home">HOME</string>
+    <string name="search">SEARCH</string>
+    <string name="ABOUT">ABOUT</string>
+    <string name="add_new">Add_ITEM</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
