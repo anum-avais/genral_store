@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,6 +25,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,71 +41,72 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore objfirebaseFirestore;
     BottomNavigationView objbottomNavigationView;
-    String city = "lahore", email = "anum@gmail.com";
+    String city = "lahore1", email = "anum@gmail.com";
+    private FirebaseAuth.AuthStateListener authListener;
+    private FirebaseAuth auth;
 
 
-    ListView listView;
-    String mTitle[] = {"LIPSTICK", "LIP_GLOSS", "MASCARA", "EYELINERS", "BLUSH", "BB_CREAM", "CONCEALER", "BRONZER", "SETTING_SPRAY", "SKIN_CARE"};
-    String mDescription[] = {"LIPSTICK Description", "LIP_GLOSS Description", "MASCARA Description", "EYELINERS Description", "BLUSH Description", "BB_CREAM Description", "CONCEALER Description", "SETTING_SPRAY Description", "SKIN_CARE Description"};
-
-    int images[] = {R.drawable.lipstick, R.drawable.lip_gloss, R.drawable.mascara, R.drawable.eyeliner, R.drawable.blush, R.drawable.bb_cream, R.drawable.concealer, R.drawable.bronzer, R.drawable.setting_spray, R.drawable.skin_care};
-
-    /// make fragments objects
+   /// make fragments objects
     HomeFragment objectHomeFramg;
     AboutFragment objectDetailFramg;
+
+    ////
+    NavigationView objectNavigationView;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ///
-        listView = findViewById(R.id.listView);
 
-        MyAdapter adapter = new MyAdapter(this, mTitle, mDescription, images);
-        listView.setAdapter(adapter);
-        // there is my mistake...
-        // now again check this..
+////////// side bar... navigation
 
-        // now set item click on list view
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        objectNavigationView = findViewById(R.id.navigationView);
+
+        objectNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    Toast.makeText(MainActivity.this, "you selected lipstick", Toast.LENGTH_SHORT).show();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.item_register_book)
+                {
+                   // Toast.makeText(MainActivity.this, "Home item clicked", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this,ProductListActivity.class));
+                    return true;
+
+
+                }else if(item.getItemId() == R.id.item_add_customer)
+                {
+                    startActivity(new Intent(MainActivity.this,SelectProduct.class));
+                    return true;
                 }
-                if (position == 1) {
-                    Toast.makeText(MainActivity.this, "you selected lip gloss", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 2) {
-                    Toast.makeText(MainActivity.this, "you selected mascara", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 3) {
-                    Toast.makeText(MainActivity.this, "you selected eyeliner", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 4) {
-                    Toast.makeText(MainActivity.this, "blush", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 5) {
-                    Toast.makeText(MainActivity.this, "foundation", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 6) {
-                    Toast.makeText(MainActivity.this, "you selected bb Cream", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 7) {
-                    Toast.makeText(MainActivity.this, "concelaler", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 8) {
-                    Toast.makeText(MainActivity.this, "bronzer", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 9) {
-                    Toast.makeText(MainActivity.this, "setting speay", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 10) {
-                    Toast.makeText(MainActivity.this, "skin care", Toast.LENGTH_SHORT).show();
-                }
+                return false;
             }
         });
-        // so item click is done now check list view
 
+        auth = FirebaseAuth.getInstance();
+        // check if user not logged in
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+
+          //  Toast.makeText(MainActivity.this, "User is null", Toast.LENGTH_LONG).show();
+            ////start funtion ...internt class... reconnct krna ka lua
+
+            startActivity(new Intent(MainActivity.this, UserLogin.class));
+            finish();
+        }
+        ///object auth user login hain ..? ya state check kra rahe hai
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                Toast.makeText(MainActivity.this, "inside listner auth", Toast.LENGTH_LONG).show();
+                if (user == null) {
+                    Toast.makeText(MainActivity.this, "User is null", Toast.LENGTH_LONG).show();
+
+                    startActivity(new Intent(MainActivity.this, UserLogin.class));
+                    finish();
+                }
+            }
+        };
+      ///////////////////
         /// initializing fragments objects
         objectHomeFramg = new HomeFragment();
         objectDetailFramg = new AboutFragment();
@@ -142,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+////////toset 1
     public void showtoast(View view) {
 
         Toast objtoast = new Toast(this);
@@ -155,6 +160,20 @@ public class MainActivity extends AppCompatActivity {
         objtoast.show();
     }
 
+
+    ////////toset 2
+    public void quotes(View view) {
+
+        Toast objtoast = new Toast(this);
+
+        objtoast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        objtoast.setDuration(Toast.LENGTH_LONG);
+        LayoutInflater objinflater = getLayoutInflater();
+        View convertedview = objinflater.inflate(R.layout.loast_layout2, (ViewGroup) findViewById(R.id.hz_toast1), false);
+        objtoast.setView(convertedview);
+        objtoast.show();
+    }
+    ////first code for creat the conectionwith fire base its working
     public void addvaluesToFirebase(View view) {
         try {
             Map<String, Object> objectmap = new HashMap<>();
@@ -178,59 +197,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+              } catch (Exception e) { Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show(); }
 
 
     }
 
     private void changeFragment(Fragment objectFragment) {
         try {
-            FragmentTransaction objectTransaction =
-                    getSupportFragmentManager().beginTransaction();
+            FragmentTransaction objectTransaction = getSupportFragmentManager().beginTransaction();
 
             objectTransaction.replace(R.id.container, objectFragment).commit();
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    class MyAdapter extends ArrayAdapter<String> {
-
-        Context context;
-        String rTitle[];
-        String rDescription[];
-        int rImgs[];
-
-        MyAdapter(Context c, String title[], String description[], int imgs[]) {
-            super(c, R.layout.row, R.id.textView1, title);
-            this.context = c;
-            this.rTitle = title;
-            this.rDescription = description;
-            this.rImgs = imgs;
-
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row, parent, false);
-            ImageView images = row.findViewById(R.id.image);
-            TextView myTitle = row.findViewById(R.id.textView1);
-            TextView myDescription = row.findViewById(R.id.textView2);
-
-            // now set our resources on views
-            images.setImageResource(rImgs[position]);
-            myTitle.setText(rTitle[position]);
-            myDescription.setText(rDescription[position]);
-
-
-            return row;
-        }
-
-
     }
 }

@@ -20,7 +20,18 @@
         android:onClick="showtoast"
         android:layout_marginTop="300dp"
         android:text=" show custmiza "
+
         />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:id="@+id/hz_toast1"
+        android:onClick="quotes"
+        android:layout_marginTop="500dp"
+        android:text=" show custmiza "
+        />
+
+
 
 
 

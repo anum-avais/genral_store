@@ -1,5 +1,6 @@
 package com.example.genralstore;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,5 +25,17 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false);
-    }
-}
+    }}
+
+   //     public void list_view(View view)
+     //   {
+       //     if(view.getItemId() == R.id.item_register_book)
+         //   {
+                // Toast.makeText(MainActivity.this, "Home item clicked", Toast.LENGTH_LONG).show();
+           //     startActivity(new Intent(MainActivity.this,ProductListActivity.class));
+             //   return true;
+
+
+        //    }
+      //  }
+
